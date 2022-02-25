@@ -1,32 +1,34 @@
-
-
 from pyrogram import Client, filters
-from gtts import gTTS
-import datetime
-import requests
+from pyrogram.errors import FloodWait, SlowmodeWait
+import time as t
+from datetime import datetime, timedelta
 import random
+import pytz
+from PIL import Image, ImageFilter
+import tgcrypto
+from gtts import gTTS
+from pyrogram.raw import functions
 import asyncio
-import config
-import json
-import time
 import os
+import requests
 
-app = Client("my_account")
+app = Client("my_account") 
 
-@app.on_message(filters.command(["web"], prefixes="."))
+@app.on_message(filters.command(["vzlom"], prefixes="."))
 async def vzlom(client, message):
-	   try:
-	   	old_link = message.text.split()[1]
-	   except:
-	   	await message.reply("<b>Еблан! Надо так! .web (сайт)</b>")
-	   	return
-	   new_link = 'https://webshot.deam.io/{}/?width=1920&height=1080?type=png'.format(old_link)
-	   try:
-	   	await app.send_photo(message.chat.id, new_link, caption=f'<b>✅ Вот твой скрин от сайта: {old_link}</b>')
-	   except:
-	   	await message.reply("❌ Не удалось сделать скриншот сайта!")
+		if not message.reply_to_message:
+			await app.send_message(message.chat.id, 'Это не реплай!', reply_to_message_id=message.message_id)
+			return
+		if message.reply_to_message.from_user.id == 1451300395:
+			await app.send_message(message.chat.id, "Жопу создателя нельзя взломать!", reply_to_message_id=message.message_id)
+			return
+		vzlom = await app.send_message(message.chat.id, 'Взлом жопы...🌀', reply_to_message_id=message.message_id)
+		await asyncio.sleep(1)
+		await app.edit_message_text(message.chat.id, vzlom.message_id, f'**Жопа [{message.reply_to_message.from_user.first_name}](tg://user?id={message.reply_to_message.from_user.id}) успешно взломана!**')
+	   
+
 	   
 	       		
-app.run()
+
 
 
