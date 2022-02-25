@@ -26,7 +26,7 @@ async def vzlom(client, message):
 		await asyncio.sleep(1)
 		await app.edit_message_text(message.chat.id, vzlom.message_id, f'**Жопа [{message.reply_to_message.from_user.first_name}](tg://user?id={message.reply_to_message.from_user.id}) успешно взломана!**')
 	   
-app.run
+app.run() 
 
 	   
 			
