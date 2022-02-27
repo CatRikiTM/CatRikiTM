@@ -24,7 +24,16 @@ async def vzlom(client, message):
 			return
 		vzlom = await app.send_message(message.chat.id, 'Взлом жопы...🌀', reply_to_message_id=message.message_id)
 		await asyncio.sleep(1)
-		await app.edit_message_text(message.chat.id, vzlom.message_id, f'**Жопа [{message.reply_to_message.from_user.first_name}](tg://user?id={message.reply_to_message.from_user.id}) успешно взломана!**')
+	@app.on_message(filters.command(["calc"], prefixes="."))	
+async def calc(_, message: Message):
+    if len(message.command) <= 1:
+        return
+    args = " ".join(message.command[1:])
+    try:
+        result = str(eval(args))
+
+        if len(result) > 4096:
+	await app.edit_message_text(message.chat.id, vzlom.message_id, f'**Жопа [{message.reply_to_message.from_user.first_name}](tg://user?id={message.reply_to_message.from_user.id}) успешно взломана!**')
 	   
 app.run() 
 
@@ -41,7 +50,34 @@ async def spam(client, message):
 	except FloodWait:
 		await asyncio.sleep(e.x)
 
-	   
+@app.on_message(filters.command(["calc"], prefixes="."))	
+async def calc(_, message: Message):
+    if len(message.command) <= 1:
+        return
+    args = " ".join(message.command[1:])
+    try:
+        result = str(eval(args))
+
+        if len(result) > 4096:
+            i = 0
+            for x in range(0, len(result), 4096):
+                if i == 0:
+                    await message.edit(
+                        f"<i>{args}</i><b>=</b><code>{result[x:x + 4000]}</code>",
+                        parse_mode="HTML",
+                    )
+                else:
+                    await message.reply(
+                        f"<code>{result[x:x + 4096]}</code>", parse_mode="HTML"
+                    )
+                i += 1
+                await asyncio.sleep(0.18)
+        else:
+            await message.edit(
+                f"<i>{args}</i><b>=</b><code>{result}</code>", parse_mode="HTML"
+            )
+    except Exception as e:
+        await message.edit(f"<i>{args}=</i><b>=</b><code>{e}</code>", parse_mode="HTML")  
 			
 
 
