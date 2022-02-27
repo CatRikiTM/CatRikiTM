@@ -1,4 +1,4 @@
- from pyrogram.errors import FloodWait, SlowmodeWait
+from pyrogram.errors import FloodWait, SlowmodeWait
 import time as t
 from datetime import datetime, timedelta
 import random
