@@ -171,7 +171,6 @@ async def demotivator(client: Client, message: Message):
 async def mirror_flip(client: Client, message: Message):
     await message.edit("<b>Processing...</b>")
     param = {"отразить1": 1, "отразить2": 2, "отразить3": 3, "отразить4": 4}[message.command[0]]
-    await make(client, message, param)              												
-													
+    param = {"отразить1": 1, "отразить2": 2, "отразить3": 3, "отразить4": 4}[message.command[0]]													
 													
 app.run()
