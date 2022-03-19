@@ -16,24 +16,14 @@ from io import BytesIO
 import shutil
 from decimal import getcontext, Decimal
 from typing import List, Optional, Tuple, Union
-import numpy as np
+from glitch_this import ImageGlitcher
 
 
-app = Client("my_account") 
+app = Client("my_account", api_id=11684516, api_hash="6d80a20f13e07684e51c1d914ef59503"
+)
 
 
 
-@app.on_message(filters.command(["vzlom"], prefixes="."))
-async def vzlom(client, message):
-		if not message.reply_to_message:
-			await app.send_message(message.chat.id, 'Это не реплай!', reply_to_message_id=message.message_id)
-			return
-		if message.reply_to_message.from_user.id == 1451300395:
-			await app.send_message(message.chat.id, "Жопу создателя нельзя взломать!", reply_to_message_id=message.message_id)
-			return
-		vzlom = await app.send_message(message.chat.id, 'Взлом жопы...🌀', reply_to_message_id=message.message_id)
-		await asyncio.sleep(1)
-		await app.edit_message_text(message.chat.id, vzlom.message_id, f'**Жопа [{message.reply_to_message.from_user.first_name}](tg://user?id={message.reply_to_message.from_user.id}) успешно взломана!**')
 		
 @app.on_message(filters.command(["spam"], prefixes=".") & filters.me)
 async def spam(client, message):
@@ -47,27 +37,28 @@ async def spam(client, message):
 			await app.send_message(message.chat.id, text_str)
 	except FloodWait:
 		await asyncio.sleep(e.x)
+	
+spam_text = 'ого'
+used_filters = filters.channel
+	
+@app.on_message(used_filters)
+async def klalsls(_, message):
+	if message.edit_date is None or (
+            datetime.utcfromtimestamp(message.edit_date) - datetime.utcfromtimestamp(message.date)).total_seconds() > 5:
+		return
+	linked = await get_linked(message)
+	await asyncio.sleep(0.25)
+	nsg = await app.get_history(linked, limit=1)
+	await asyncio.sleep(0.25)
+	await nsg[0].reply_text(spam_text)
+	await asyncio.sleep(0.25)
+	print("хуй: " + message.chat.title)
 
-@app.on_message(filters.command(["hui"], prefixes="."))
-async def hui(Client, message):
-        size = (128, 128)
-        path = "shakal.png"
-        if message.reply_to_message:
-        	try:
-        		await app.download_media(message.reply_to_message.photo, file_name=path, block=True)
-        		original = Image.open('downloads/shakal.png')
-        		original.thumbnail(size)
-        		blurred_original = original.filter(ImageFilter.CONTOUR)
-        		blurred_original.save('saved/shakal.png')
-        		blurred_original.show()
-        		await app.send_message(message.chat.id, "**🌀Выполняется...🌀**")
-        		await asyncio.sleep(1)
-        		await app.send_photo(message.chat.id, "saved/shakal.png", caption="**Вот твоё фото✅**", reply_to_message_id=message.message_id)
-        	except AttributeError:
-        		return await app.send_message(message.chat.id, "В реплае нет фото.")
-        		os.remove("downloads/shakal.png")
-        		os.remove("saved/shakal.png")
+async def get_linked(nsg):
+	channel = await app.get_chat(nsg.sender_chat.id)
+	return channel.linked_chat.id
 
-
+	
+	
 
 app.run()
